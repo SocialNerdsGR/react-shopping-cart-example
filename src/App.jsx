@@ -8,6 +8,8 @@ function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [needle, setNeedle] = useState('');
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
 
   /**
    * Computed products filtered by user input.
@@ -17,15 +19,18 @@ function App() {
     return products.filter(product => product.name.match(regex));
   }, [needle, products]);
 
+  async function fetchProducts() {
+    const response = await getProducts(page);
+    const loadedProducts = [...products, ...response.data]
+    setProducts(loadedProducts);
+    setCount(response.headers['x-total-count'] - loadedProducts.length);
+    setPage(page + 1)
+  }
+
   /**
    * Load products.
    */
   useEffect(() => {
-    async function fetchProducts() {
-      const response = await getProducts();
-      setProducts(response.data);
-    }
-
     fetchProducts();
   }, []);
 
@@ -110,6 +115,7 @@ function App() {
       <div className={`main`}>
         <div className="products">
           {filteredProducts.map(product => (<Product key={product.id} {...product} addHandler={() => addToCart(product)}/>))}
+          {count !== 0 ? <button onClick={fetchProducts}>Load more</button> : null}
         </div>
         <div className="card">
           <ul>
