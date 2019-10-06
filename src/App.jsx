@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {getProducts} from './api';
 import './App.css';
 import Product from "./components/product";
@@ -7,7 +7,19 @@ import CartItem from "./components/cart-item";
 function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [needle, setNeedle] = useState('');
 
+  /**
+   * Computed products filtered by user input.
+   */
+  const filteredProducts = useMemo(() => {
+    const regex = new RegExp(needle, 'i');
+    return products.filter(product => product.name.match(regex));
+  }, [needle, products]);
+
+  /**
+   * Load products.
+   */
   useEffect(() => {
     async function fetchProducts() {
       const response = await getProducts();
@@ -17,6 +29,12 @@ function App() {
     fetchProducts();
   }, []);
 
+  /**
+   * Add product to cart.
+   *
+   * @param {object} product
+   *  Product object.
+   */
   function addToCart(product) {
     const item = cartItems.find(item => item.id === product.id);
     if (!item) {
@@ -24,6 +42,12 @@ function App() {
     }
   }
 
+  /**
+   * Decrease product quantity.
+   *
+   * @param {object} product
+   *  Cart product object.
+   */
   function decreaseHandler(product) {
     if (product.quantity === 1) {
       return removeHandler(product.id);
@@ -39,6 +63,12 @@ function App() {
     setCartItems([...items])
   }
 
+  /**
+   * Increase product quantity.
+   *
+   * @param {object} product
+   *  Cart product object.
+   */
   function increaseHandler(product) {
     const items = cartItems.map(item => {
       if (item.id === product.id) {
@@ -51,18 +81,35 @@ function App() {
     setCartItems([...items])
   }
 
+  /**
+   * Remove product from cart.
+   *
+   * @param {number} id
+   *  Product id.
+   *
+   */
   function removeHandler(id) {
     const items = cartItems.filter(item => item.id !== id);
     setCartItems(items);
   }
 
+  /**
+   * Update search needle.
+   *
+   * @param event
+   *  Input changed event.
+   */
+  function searchHandler(event) {
+    setNeedle(event.target.value);
+  }
+
   return (
     <div className="app">
       <h1>SocialNerds SWAG</h1>
-      <input className={`search`} type="text" placeholder={`Search...`}/>
+      <input className={`search`} type="text" placeholder={`Search...`} value={needle} onChange={searchHandler}/>
       <div className={`main`}>
         <div className="products">
-          {products.map(product => (<Product key={product.id} {...product} addHandler={() => addToCart(product)}/>))}
+          {filteredProducts.map(product => (<Product key={product.id} {...product} addHandler={() => addToCart(product)}/>))}
         </div>
         <div className="card">
           <ul>
