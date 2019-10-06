@@ -26,7 +26,7 @@ function App() {
    */
   async function fetchProducts() {
     const response = await getProducts(page);
-    const loadedProducts = [...products, ...response.data]
+    const loadedProducts = [...products, ...response.data];
     setProducts(loadedProducts);
     setCount(response.headers['x-total-count'] - loadedProducts.length);
     setPage(page + 1)
@@ -117,7 +117,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>SocialNerds SWAG</h1>
+      <h1>SocialNerds</h1>
       <input className={`search`} type="text" placeholder={`Search...`} value={needle} onChange={searchHandler}/>
       <div className={`main`}>
         <div className="filters">
