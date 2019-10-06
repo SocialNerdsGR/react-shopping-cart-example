@@ -19,6 +19,11 @@ function App() {
     return products.filter(product => product.name.match(regex));
   }, [needle, products]);
 
+  /**
+   * Fetch products from server.
+   *
+   * @returns {Promise<void>}
+   */
   async function fetchProducts() {
     const response = await getProducts(page);
     const loadedProducts = [...products, ...response.data]
@@ -42,9 +47,11 @@ function App() {
    */
   function addToCart(product) {
     const item = cartItems.find(item => item.id === product.id);
-    if (!item) {
-      setCartItems([...cartItems, {...product, quantity: 1}])
+    if (item) {
+      return increaseHandler(item);
     }
+
+    setCartItems([...cartItems, {...product, quantity: 1}]);
   }
 
   /**
@@ -113,11 +120,15 @@ function App() {
       <h1>SocialNerds SWAG</h1>
       <input className={`search`} type="text" placeholder={`Search...`} value={needle} onChange={searchHandler}/>
       <div className={`main`}>
+        <div className="filters">
+          <h3>Filters</h3>
+        </div>
         <div className="products">
           {filteredProducts.map(product => (<Product key={product.id} {...product} addHandler={() => addToCart(product)}/>))}
           {count !== 0 ? <button onClick={fetchProducts}>Load more</button> : null}
         </div>
-        <div className="card">
+        <div className="cart">
+          <h3>Cart</h3>
           <ul>
             {cartItems.map(item =>
               <CartItem
