@@ -6,7 +6,7 @@ const CartItem = ({quantity, name, increaseHandler, decreaseHandler, removeHandl
     <span>{name}</span>
     <button onClick={increaseHandler}>+</button>
     <button onClick={decreaseHandler}>-</button>
-    <button onClick={removeHandler}>Remove from cart</button>
+    <button className={`remove`} onClick={removeHandler}>x</button>
   </li>
 );
 

@@ -1,13 +1,14 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import {getProducts} from './api';
-import './App.css';
-import Product from "./components/product";
-import CartItem from "./components/cart-item";
+import React, {useState, useEffect, useMemo} from "react";
+import {getProducts} from "./api";
+import "./App.css";
+import CheckoutForm from "./components/checkout-form.js";
+import Cart from "./components/cart";
+import Products from "./components/products";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [needle, setNeedle] = useState('');
+  const [needle, setNeedle] = useState("");
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
 
@@ -15,7 +16,7 @@ function App() {
    * Computed products filtered by user input.
    */
   const filteredProducts = useMemo(() => {
-    const regex = new RegExp(needle, 'i');
+    const regex = new RegExp(needle, "i");
     return products.filter(product => product.name.match(regex));
   }, [needle, products]);
 
@@ -24,13 +25,13 @@ function App() {
    *
    * @returns {Promise<void>}
    */
-  async function fetchProducts() {
+  const fetchProducts = async () => {
     const response = await getProducts(page);
     const loadedProducts = [...products, ...response.data];
     setProducts(loadedProducts);
-    setCount(response.headers['x-total-count'] - loadedProducts.length);
-    setPage(page + 1)
-  }
+    setCount(response.headers["x-total-count"] - loadedProducts.length);
+    setPage(page + 1);
+  };
 
   /**
    * Load products.
@@ -72,7 +73,7 @@ function App() {
       return item;
     });
 
-    setCartItems([...items])
+    setCartItems([...items]);
   }
 
   /**
@@ -90,7 +91,7 @@ function App() {
       return item;
     });
 
-    setCartItems([...items])
+    setCartItems([...items]);
   }
 
   /**
@@ -118,31 +119,26 @@ function App() {
   return (
     <div className="app">
       <h1>SocialNerds</h1>
-      <input className={`search`} type="text" placeholder={`Search...`} value={needle} onChange={searchHandler}/>
+      <input
+        className={`search`}
+        type="text"
+        placeholder={`Search...`}
+        value={needle}
+        onChange={searchHandler}
+      />
       <div className={`main`}>
-        <div className="filters">
-          <h3>Filters</h3>
-        </div>
-        <div className="products">
-          {filteredProducts.map(product => (<Product key={product.id} {...product} addHandler={() => addToCart(product)}/>))}
-          {count !== 0 ? <button onClick={fetchProducts}>Load more</button> : null}
-        </div>
-        <div className="cart">
-          <h3>Cart</h3>
-          <ul>
-            {cartItems.map(item =>
-              <CartItem
-                key={item.id}
-                quantity={item.quantity}
-                name={item.name}
-                decreaseHandler={() => decreaseHandler(item)}
-                increaseHandler={() => increaseHandler(item)}
-                removeHandler={() => removeHandler(item.id)}
-              />)
-            }
-          </ul>
-          <button>Checkout</button>
-        </div>
+        <Products
+          count={count}
+          filteredProducts={filteredProducts}
+          fetchProducts={fetchProducts}
+          addToCart={addToCart}
+        />
+        <Cart
+          removeHandler={removeHandler}
+          increaseHandler={increaseHandler}
+          decreaseHandler={decreaseHandler}
+          cartItems={cartItems}
+        />
       </div>
     </div>
   );
