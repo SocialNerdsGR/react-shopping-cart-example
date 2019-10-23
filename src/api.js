@@ -13,7 +13,7 @@ export const getProducts = (page = 1) => instance.get(`/products?_page=${page}&_
  * DOT NOT MODIFY.
  */
 instance.interceptors.request.use((request) => {
-  const apiParam = `api_key=${API_KEY}`
+  const apiParam = `api_key=${API_KEY}`;
   if (request.url.includes('?')) {
     request.url += `&${apiParam}`;
     return request;

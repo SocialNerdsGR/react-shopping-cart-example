@@ -1,9 +1,7 @@
 import React from 'react';
 import Product from "./product";
 
-
 const Products = ({filteredProducts, addToCart, fetchProducts, count}) => {
-
   return (
     <div className="products">
       {filteredProducts.map(product => (

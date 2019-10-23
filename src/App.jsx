@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useMemo} from "react";
-import {getProducts} from "./api";
-import "./App.css";
-import CheckoutForm from "./components/checkout-form.js";
+import React, { useState, useEffect, useMemo } from "react";
+import { getProducts } from "./api";
 import Cart from "./components/cart";
 import Products from "./components/products";
+
+import "./App.css";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -52,7 +52,7 @@ function App() {
       return increaseHandler(item);
     }
 
-    setCartItems([...cartItems, {...product, quantity: 1}]);
+    setCartItems([...cartItems, { ...product, quantity: 1 }]);
   }
 
   /**
@@ -68,7 +68,7 @@ function App() {
 
     const items = cartItems.map(item => {
       if (item.id === product.id) {
-        return {...item, quantity: item.quantity - 1};
+        return { ...item, quantity: item.quantity - 1 };
       }
       return item;
     });
@@ -85,7 +85,7 @@ function App() {
   function increaseHandler(product) {
     const items = cartItems.map(item => {
       if (item.id === product.id) {
-        return {...item, quantity: item.quantity + 1};
+        return { ...item, quantity: item.quantity + 1 };
       }
 
       return item;

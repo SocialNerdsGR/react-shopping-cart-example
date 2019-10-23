@@ -21,6 +21,7 @@ button, input[type=submit] {
   color: white;
   background-color: cornflowerblue;
 }
+
 button:disabled {
   background-color: darkgray;
 }
