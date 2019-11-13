@@ -11,9 +11,6 @@ const Products = ({filteredProducts, addToCart, fetchProducts, count}) => {
           addHandler={() => addToCart(product)}
         />
       ))}
-      {count !== 0 ? (
-        <button onClick={fetchProducts}>Load more</button>
-      ) : null}
     </div>
   );
 };

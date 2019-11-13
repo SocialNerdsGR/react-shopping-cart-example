@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { getProducts } from "./api";
+import axios from "axios";
 import Cart from "./components/cart";
 import Products from "./components/products";
 
@@ -8,44 +8,21 @@ import "./App.css";
 function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [needle, setNeedle] = useState("");
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState(0);
+  const [query, setQuery] = useState("");
 
-  /**
-   * Computed products filtered by user input.
-   */
   const filteredProducts = useMemo(() => {
-    const regex = new RegExp(needle, "i");
+    const regex = new RegExp(query, "i");
     return products.filter(product => product.name.match(regex));
-  }, [needle, products]);
+  }, [query, products]);
 
-  /**
-   * Fetch products from server.
-   *
-   * @returns {Promise<void>}
-   */
-  const fetchProducts = async () => {
-    const response = await getProducts(page);
-    const loadedProducts = [...products, ...response.data];
-    setProducts(loadedProducts);
-    setCount(response.headers["x-total-count"] - loadedProducts.length);
-    setPage(page + 1);
-  };
-
-  /**
-   * Load products.
-   */
   useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await axios.get('https://shopping-cart-json-server.herokuapp.com/products');
+      setProducts(response.data);
+    }
     fetchProducts();
   }, []);
 
-  /**
-   * Add product to cart.
-   *
-   * @param {object} product
-   *  Product object.
-   */
   function addToCart(product) {
     const item = cartItems.find(item => item.id === product.id);
     if (item) {
@@ -55,12 +32,6 @@ function App() {
     setCartItems([...cartItems, { ...product, quantity: 1 }]);
   }
 
-  /**
-   * Decrease product quantity.
-   *
-   * @param {object} product
-   *  Cart product object.
-   */
   function decreaseHandler(product) {
     if (product.quantity === 1) {
       return removeHandler(product.id);
@@ -76,12 +47,6 @@ function App() {
     setCartItems([...items]);
   }
 
-  /**
-   * Increase product quantity.
-   *
-   * @param {object} product
-   *  Cart product object.
-   */
   function increaseHandler(product) {
     const items = cartItems.map(item => {
       if (item.id === product.id) {
@@ -94,26 +59,13 @@ function App() {
     setCartItems([...items]);
   }
 
-  /**
-   * Remove product from cart.
-   *
-   * @param {number} id
-   *  Product id.
-   *
-   */
   function removeHandler(id) {
     const items = cartItems.filter(item => item.id !== id);
     setCartItems(items);
   }
 
-  /**
-   * Update search needle.
-   *
-   * @param event
-   *  Input changed event.
-   */
   function searchHandler(event) {
-    setNeedle(event.target.value);
+    setQuery(event.target.value);
   }
 
   return (
@@ -123,14 +75,12 @@ function App() {
         className={`search`}
         type="text"
         placeholder={`Search...`}
-        value={needle}
+        value={query}
         onChange={searchHandler}
       />
       <div className={`main`}>
         <Products
-          count={count}
           filteredProducts={filteredProducts}
-          fetchProducts={fetchProducts}
           addToCart={addToCart}
         />
         <Cart

@@ -15,6 +15,9 @@ const CheckoutForm = ({items}) => {
         email,
         address
       }));
+      setName('');
+      setEmail('');
+      setAddress('');
     }}>
       <ul>
         {items.map((item) => (<li key={item.id}>{item.name} x {item.quantity} = {item.quantity * item.price}</li>))}
