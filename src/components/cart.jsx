@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import CartItem from "./cart-item";
 import CheckoutForm from "./checkout-form.js";
-import PriceSum from "./price-sum";
+import TotalAmount from "./total-amount";
 
 const Cart = ({cartItems, decreaseHandler, increaseHandler, removeHandler}) => {
   const [showCheckout, setShowCheckout] = useState(false);
@@ -22,7 +22,7 @@ const Cart = ({cartItems, decreaseHandler, increaseHandler, removeHandler}) => {
                 removeHandler={() => removeHandler(item.id)}
               />
             ))}
-            <PriceSum cartItems={cartItems}/>
+            <TotalAmount cartItems={cartItems}/>
             <button disabled={cartItems.length === 0} onClick={() => setShowCheckout(true)}>Checkout</button>
           </ul>
         </div>

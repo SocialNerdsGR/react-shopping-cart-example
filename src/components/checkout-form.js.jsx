@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PriceSum from "./price-sum";
+import TotalAmount from "./total-amount";
 
 const CheckoutForm = ({items}) => {
 
@@ -22,7 +22,7 @@ const CheckoutForm = ({items}) => {
       <ul>
         {items.map((item) => (<li key={item.id}>{item.name} x {item.quantity} = {item.quantity * item.price}</li>))}
       </ul>
-      <PriceSum cartItems={items}/>
+      <TotalAmount cartItems={items}/>
       <div>
         Name:
         <input type="text" required value={name} onChange={(e) => {setName(e.target.value)}}/>

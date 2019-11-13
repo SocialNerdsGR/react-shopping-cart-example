@@ -1,6 +1,6 @@
 import React from "react";
 
-const PriceSum = ({cartItems}) => (
+const TotalAmount = ({cartItems}) => (
   <div>
     <span>Sum:</span>
     <span>
@@ -12,4 +12,4 @@ const PriceSum = ({cartItems}) => (
   </div>
 );
 
-export default PriceSum;
+export default TotalAmount;
