@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import CartItem from "./cart-item";
-import CheckoutForm from "./checkout-form";
-import TotalAmount from "./total-amount";
+import CartItem from "./CartItem";
+import CheckoutForm from "./CheckoutForm";
+import TotalAmount from "./TotalAmount";
 
 const Cart = ({cartItems, decreaseHandler, increaseHandler, removeHandler}) => {
   const [showCheckout, setShowCheckout] = useState(false);

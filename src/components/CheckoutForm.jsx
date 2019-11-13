@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TotalAmount from "./total-amount";
+import TotalAmount from "./TotalAmount";
 
 const CheckoutForm = ({items}) => {
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import Product from "./product";
+import Product from "./Product";
 
-const Products = ({filteredProducts, addToCart, fetchProducts, count}) => {
+const Products = ({filteredProducts, addToCart}) => {
   return (
     <div className="products">
       {filteredProducts.map(product => (
